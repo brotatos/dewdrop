@@ -10,45 +10,45 @@ from version import new_version
 import gtk
 
 class App:
-	def __init__(self):
-		self._cfg = Config()
+        def __init__(self):
+                self._cfg = Config()
 
-		new_version()
+                new_version()
 
-		if self._cfg.get('email') == None:
-			# Time to login
-			self.show_login()
-		else:
-			# Test the credentials
-			if self.test_credentials(self._cfg.get('email'), self._cfg.get('passhash')) == True:
-				self.start()
-			else:
-				self.logout()
+                if self._cfg.get('email') == None:
+                        # Time to login
+                        self.show_login()
+                else:
+                        # Test the credentials
+                        if self.test_credentials(self._cfg.get('email'), self._cfg.get('passhash')) == True:
+                                self.start()
+                        else:
+                                self.logout()
 
-	def logout(self): 
-		self._cfg.set('email', None)
-		self._cfg.set('passhash', None)
-		self._cfg.save()
+        def logout(self): 
+                self._cfg.set('email', None)
+                self._cfg.set('passhash', None)
+                self._cfg.save()
 
-		delattr(self, 'dew')
-		self.show_login()
+                delattr(self, 'dew')
+                self.show_login()
 
-	def show_login(self):
-		login = LoginWindow(self)
-		login.show()
+        def show_login(self):
+                login = LoginWindow(self)
+                login.show()
 
-	def test_credentials(self, email, passhash):
-		d = DAPI()
-		d.auth(email, passhash)
-		rtn = d.account_details()
-		
-		if rtn.is_error():
-			return rtn
-		return True
+        def test_credentials(self, email, passhash):
+                d = DAPI()
+                d.auth(email, passhash)
+                rtn = d.account_details()
 
-	def start(self):
-		self.dew = DewDrop(self)
-		print 'start'
+                if rtn.is_error():
+                        return rtn
+                return True
+
+        def start(self):
+                self.dew = DewDrop(self)
+                print('start')
 
 if __name__ == "__main__":
-	app = App()
+        app = App()
